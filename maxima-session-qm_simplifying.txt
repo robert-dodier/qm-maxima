@@ -1,0 +1,55 @@
+(%i1) linel: 65;
+(%o1)                          65
+(%i2) load ("qm_simplifying.lisp");
+(%o2)                  qm_simplifying.lisp
+(%i3) load ("qm_simplifying.mac");
+(%o3)                  qm_simplifying.mac
+(%i4) disprule (all);
+(%t4)           brarule1 : <aa, bb| -> <[aa, bb]|
+
+(%t5)           ketrule1 : |aa, bb> -> |[aa, bb]>
+
+(%t6)       brarule2 : <aa, bb, cc| -> <[aa, bb, cc]|
+
+(%t7)       ketrule2 : |aa, bb, cc> -> |[aa, bb, cc]>
+
+(%t8)       brarule3 : <ll| -> conjugate(matrix(ll))
+
+(%t9)       ketrule3 : |ll> -> transpose(matrix(ll))
+
+(%t10)            daggerrule1 : (<aa|)† -> |aa>
+
+(%t11)            daggerrule2 : (|aa>)† -> <aa|
+
+(%t12)    daggerrule3 : mm† -> conjugate(transpose(mm))
+
+(%t13)      normrule1 : norm(aa) -> sqrt(<aa| . |aa>)
+
+(%o13) [%t4, %t5, %t6, %t7, %t8, %t9, %t10, %t11, %t12, %t13]
+(%i14) declare ([a, b, c], complex);
+(%o14)                        done
+(%i15) bra (a, b);
+                 ┌                            ┐
+(%o15)           │ conjugate(a)  conjugate(b) │
+                 └                            ┘
+(%i16) ket (a, b);
+                              ┌   ┐
+                              │ a │
+(%o16)                        │   │
+                              │ b │
+                              └   ┘
+(%i17) bra (a, b) . ket (b, c);
+(%o17)           conjugate(b) c + conjugate(a) b
+(%i18) dagger (bra (a, b));
+                              ┌   ┐
+                              │ a │
+(%o18)                        │   │
+                              │ b │
+                              └   ┘
+(%i19) dagger (z);
+(%o19)                         z†
+(%i20) dagger (dagger (z))
+;
+(%o20)                        (z†)†
+(%i21) norm ([a, b]);
+(%o21)        sqrt(b conjugate(b) + a conjugate(a))

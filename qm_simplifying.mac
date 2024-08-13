@@ -1,0 +1,38 @@
+/* implement bra, ket operators via simplification */
+
+/* bra and ket consider multiple arguments as a list */
+
+matchdeclare ([aa, bb, cc], all);
+
+tellsimpafter (bra (aa, bb), bra ([aa, bb]));
+
+tellsimpafter (ket (aa, bb), ket ([aa, bb]));
+
+tellsimpafter (bra (aa, bb, cc), bra ([aa, bb, cc]));
+
+tellsimpafter (ket (aa, bb, cc), ket ([aa, bb, cc]));
+
+/* bra and ket of a list represented as row and column matrices, respectively */
+
+matchdeclare (ll, listp);
+
+tellsimpafter (bra (ll), conjugate (matrix (ll)));
+
+tellsimpafter (ket (ll), transpose (matrix (ll)));
+
+/* dagger exchanges bra and ket */
+
+tellsimpafter (dagger (bra (aa)), ket (aa));
+
+tellsimpafter (dagger (ket (aa)), bra (aa));
+
+/* special case of dagger for matrix argument */
+
+matchdeclare (mm, matrixp);
+
+tellsimpafter (dagger (mm), conjugate (transpose (mm)));
+
+/* norm defined in terms of bra and ket */
+
+tellsimpafter (norm (aa), sqrt (bra (aa) . ket (aa)));
+
