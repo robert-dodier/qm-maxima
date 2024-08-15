@@ -1,0 +1,28 @@
+(load ("qm_simplifying.mac"),
+ load ("qm_simplifying.lisp"),
+ 0);
+0;
+
+declare ([c1, c2], complex);
+done;
+
+ket(c1,c2);
+matrix([c1],[c2]) $
+
+bra(c1,c2);
+matrix([conjugate(c1), conjugate(c2)]) $
+
+bra(a,b);
+matrix([a,b]) $
+
+dagger(bra(%i,2));
+matrix([-%i],[2]) $
+
+braket(ket(a,b,c),ket(a,b,c));
+braket(ket(a,b,c),ket(a,b,c));
+
+norm(ket(a,b,c));
+sqrt(a^2 + b^2 + c^2) $
+
+braket(ket(a,b),ket(c,d));
+conjugate(a)*c + conjugate(b)*d;

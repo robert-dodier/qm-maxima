@@ -20,6 +20,16 @@ tellsimpafter (bra (ll), conjugate (matrix (ll)));
 
 tellsimpafter (ket (ll), transpose (matrix (ll)));
 
+/* contract bra(a) . ket(b) to braket(a, b) */
+
+tellsimpafter (bra (aa) . ket (bb), braket (bra (aa), ket (bb)));
+
+tellsimpafter (ket (aa) . ket (bb), braket (dagger (ket (aa)), ket (bb)));
+
+matchdeclare ([mm1, mm2], matrixp);
+
+tellsimpafter (braket (mm1, mm2), mm1 . mm2);
+
 /* dagger exchanges bra and ket */
 
 tellsimpafter (dagger (bra (aa)), ket (aa));
@@ -35,4 +45,8 @@ tellsimpafter (dagger (mm), conjugate (transpose (mm)));
 /* norm defined in terms of bra and ket */
 
 tellsimpafter (norm (aa), sqrt (bra (aa) . ket (aa)));
+
+/* square of the magnitude of a complex number */
+
+tellsimpafter (magsqr (aa), aa * conjugate (aa));
 
