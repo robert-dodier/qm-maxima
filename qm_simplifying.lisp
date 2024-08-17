@@ -23,3 +23,18 @@
 
 (setf (get '$dagger 'dissym) '(#\†))
 (setf (get '$dagger 'dimension) 'dimension-postfix)
+
+;; arrange for conjugate(a) to be displayed as a*, but only for a being a symbol or subscripted symbol;
+;; otherwise display as a function (which is the current default).
+;; note a* has the asterisk on the same line as a; a^* puts the asterisk too high, I believe.
+
+(defun form-conjugate (form)
+  (if ($mapatom (second form))
+    `((conjugate) ,(second form))
+    ;; hmm, do we need to ensure arguments are formatted? or it will happen automatically?
+    form))
+
+(setf (get '$conjugate 'formatter) 'form-conjugate)
+
+(setf (get 'conjugate 'dissym) '(#\*))
+(setf (get 'conjugate 'dimension) 'dimension-postfix)
