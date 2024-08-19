@@ -1,5 +1,7 @@
 /* implement bra, ket operators via simplification */
 
+simp: false; /* do not simplify while defining rules */
+
 /* bra and ket consider multiple arguments as a list */
 
 matchdeclare ([aa, bb, cc], all);
@@ -14,7 +16,9 @@ tellsimpafter (ket (aa, bb, cc), ket ([aa, bb, cc]));
 
 /* bra and ket of a list represented as row and column matrices, respectively */
 
-matchdeclare (ll, listp);
+qm_simplifying_bra_ket_list_to_matrix: true;
+
+matchdeclare (ll, lambda ([e], qm_simplifying_bra_ket_list_to_matrix and listp(e)));
 
 tellsimpafter (bra (ll), conjugate (matrix (ll)));
 
@@ -29,6 +33,16 @@ tellsimpafter (ket (aa) . ket (bb), braket (dagger (ket (aa)), ket (bb)));
 matchdeclare ([mm1, mm2], matrixp);
 
 tellsimpafter (braket (mm1, mm2), mm1 . mm2);
+
+/* same rules for subscripted bra and ket */
+
+tellsimpafter (bra[j, m] (aa, bb) . ket[j, m] (cc, dd), braket (bra[j, m](aa, bb), ket[j, m](cc, dd)));
+
+tellsimpafter (ket[j, m] (aa, bb) . ket[j, m] (cc, dd), braket (dagger (ket[j, m](aa, bb)), ket[j, m](cc, dd)));
+
+matchdeclare ([ii, jj, kk, nn], numberp);
+
+tellsimpafter (braket (bra[j, m](ii, jj), ket[j, m](kk, nn)), kron_delta (kk, ii)*kron_delta (nn, jj));
 
 /* dagger exchanges bra and ket */
 
@@ -50,3 +64,4 @@ tellsimpafter (norm (aa), sqrt (bra (aa) . ket (aa)));
 
 tellsimpafter (magsqr (aa), aa * conjugate (aa));
 
+simp: true; /* re-enable simplification */
