@@ -87,19 +87,17 @@ tpbraket_single(b,k):=block([R],
     R: inpart(b,1)*inpart(k,1)*( inpart(b,2) . inpart(k,2) )*( inpart(b,3) . inpart(k,3) ),
     R);
 
-tpadd(tpka,tpkb):=block([R,q,fac:1,cfac:1,a2,b2,a3,b3],
-    if tpka=0 then return(tpkb),
-    if tpkb=0 then return(tpka),
-    if tpka=0 and tpkb=0 then return(0),
-    cfa:inpart(tpka,1), cfb:inpart(tpkb,1),
-    if tpketp(tpka)=false or tpketp(tpkb)=false then return(disp("Input must be tpkets.")),
-    a2: inpart(tpka,2), a3: inpart(tpka,3),
-    b2: inpart(tpkb,2), b3: inpart(tpkb,3),
-    if a2=b2 and a3=b3 then R: tpket( cfa+cfb, a2, a3 ),
-    if a2=b2 and a3#b3 then R: tpket( 1, a2, cfa*a3+cfb*b3), 
-    if a2#b2 and a3=b3 then R: tpket( 1, cfa*a2+cfb*b2, b3),
-    if a2#b2 and a3#b3 then R: tpket( cfa, a2, a3) + tpket(cfb, b2, b3),
-    R);
+matchdeclare ([aa, aa1, aa2], all);
+matchdeclare ([tpk, tpk1, tpk2], tpketp);
+matchdeclare ([kk, kk1, kk2], ketp);
+
+tellsimpafter (tpadd (0, 0), 0);
+tellsimpafter (tpadd (0, aa), aa);
+tellsimpafter (tpadd (aa, 0), aa);
+tellsimpafter (tpadd (tpket (aa1, kk1, kk2), tpket (aa2, kk1, kk2)), tpket (aa1 + aa2, kk1, kk2));
+tellsimpafter (tpadd (tpket (aa1, kk, kk1), tpket (aa2, kk, kk2)), tpket (1, kk, aa1*kk1 + aa2*kk2));
+tellsimpafter (tpadd (tpket (aa1, kk1, kk), tpket (aa2, kk2, kk)), tpket (1, aa1*kk1 + aa2*kk2, kk));
+tellsimpafter (tpadd (tpk1, tpk2), tpk1 + tpk2);
 
 declare([J1z,J2z,Jtz,J1sqr,J2sqr,J1p,J2p,Jtp,J1m,J2m,Jtm],additive);
 
